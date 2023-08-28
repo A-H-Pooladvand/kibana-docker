@@ -1,0 +1,19 @@
+version: "3.8"
+
+networks:
+  elasticsearch:
+    name: elasticsearch
+    driver: bridge
+
+services:
+  kibana:
+    image: kibana:${STACK_VERSION}
+    container_name: ${CONTAINER_NAME:-kibana}
+    restart: unless-stopped
+    networks:
+      - elasticsearch
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      xpack.security.enabled: false
+    ports:
+      - "${PORT}:5601"
